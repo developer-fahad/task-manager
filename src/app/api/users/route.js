@@ -1,27 +1,15 @@
 import { connectDB } from "@/helper/db";
+import Users from "@/models/users";
 import { NextResponse } from "next/server";
 connectDB();
-export function GET(request) {
-    const users = [
-      {
-        name: "Mohibur",
-        id: "1",
-        isActive: true,
-        age: "28",
-      },
-      {
-        name: "Mohibur Rahman",
-        id: "2",
-        isActive: false,
-        age: "28",
-      },
-      {
-        name: "Mohibur Rahman Fahad",
-        id: "3",
-        isActive: true,
-        age: "28",
-      },
-    ];
-    console.log(users);
-    return NextResponse.json(users)
+
+// Get all users
+export async function GET(request) {
+  try {
+    const users = await Users.find();
+    return NextResponse.json(users); // Proper JSON formatting
+  } catch (error) {
+    console.log("Error fetching users:", error);
+    return NextResponse.json({ error: "Failed to fetch users" }, { status: 500 });
+  }
 }
